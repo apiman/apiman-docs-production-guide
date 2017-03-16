@@ -1,0 +1,73 @@
+= Apiman Production Guide {{ book.apiman.version.release }}
+
+This guide should serve as a guide to manually deploy apiman into production.
+// However, we also offer a
+// simple shell script that can do much of the work for you.
+// It will likely always be a work in progress,
+// so many production deployers may not feel comfortable using it.
+// However, it can currently install the
+// following components:
+
+== Architecture Summary
+Before we get started, it may be useful to know the overall architecture of apiman.
+Let's start with a picture!
+
+.Architecture of apiman
+image:images/apiman-architecture.png[Architecture of apiman]
+
+The apiman solution is made up of a number of pieces, including:
+
+* Keycloak Authentication Server
+* Relational Database
+* Elasticsearch Datastore
+* apiman API Gateway
+* apiman API Manager
+
+The image above should give you an idea of how they all fit together.
+
+== Elasticsearch
+
+If you wish to enable metrics in apiman (who doesn't?) you'll need to install Elasticsearch.  This is
+because the API Gateway stores all metrics information in Elasticsearch (by default), and the API Manager
+queries that data to present analytics information in the UI.
+
+Please see the Elasticsearch documentation for how to install and configure it in production.  Ultimately you
+will need Elasticsearch running in a well known and accessible location.  We also recommend you enable
+authentication (e.g. via Shield) and SSL.
+
+TIP: The data in Elasticsearch is not backed up or stored in some other location - Elasticsearch is being
+used as the primary/canonical data store for the metrics information.  You may wish to configure backup
+procedures
+
+
+== Keycloak
+In production, it is typically preferred to deploy Keycloak server as a standalone solution.  For more
+specific information about how to configure a standalone Keycloak server, see the Keycloak documentation:
+
+http://keycloak.github.io/docs/userguide/html/server-installation.html
+
+Once Keycloak is installed as a standalone server, you must configure the ‘apiman' realm.  This realm will
+be used for authentication into each of the apiman components (API Manager REST services, API Manager UI,
+API Gateway REST services, etc).
+
+TIP: You can configure additional Keycloak Realms for use with the apiman "Keycloak OAuth2 Policy".
+
+Fortunately, apiman comes with a realm file you can import.  Simply log into your Keycloak server and then
+create the apiman realm using this file:
+
+https://github.com/apiman/apiman/blob/master/distro/data/src/main/resources/data/apiman-realm.json
+
+WARNING: The realm file contains some credentials/secrets that you will want to modify or regenerate. The defaults are obviously *not* secure.
+
+Once you have created the apiman realm, you must use the Keycloak UI to add your API Manager UI as a valid
+redirect URL for the 'apimanui' client.  To do this, log into the Keycloak admin console and choose the
+*apiman* realm.  Next click "clients" in the left navigation, and choose *apimanui* in the resulting list.
+From there you can add public URL if your API Manager UI to the list of "*_Valid Redirect URIs_*".  It might
+be something like:
+
+    https://apimanager.mycompany.org:8443/apimanui/*
+
+That will allow users of the API Manager UI to actually log in and be properly redirected back to the
+application!
+
+NOTE: If you're behind load-balancers, you may need to ensure https://keycloak.github.io/docs/userguide/keycloak-server/html/server-installation.html#proxy-address-forwarding[X-Forwarded-For] is set properly.

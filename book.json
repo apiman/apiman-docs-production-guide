@@ -1,0 +1,45 @@
+{
+    "gitbook": "3.x.x",
+    "structure": {
+        "readme": "README.adoc"
+    },
+    "plugins": [
+        "anchors",
+        "theme-apiman"
+    ],
+    "pluginsConfig": {
+        "theme-default": {
+            "showLevel": true
+        },
+        "pluginsConfig": {
+            "theme-apiman": {
+                "split": true,
+                "languages": [
+                    {
+                        "lang": "js",
+                        "name": "JavaScript",
+                        "default": true
+                    },
+                    {
+                        "lang": "go",
+                        "name": "Go"
+                    }
+                ]
+            }
+        }
+    },
+    "variables": {
+        "apiman": {
+            "version": {
+                "release": "1.2.9.Final",
+                "snapshot": "1.2.10-SNAPSHOT"
+            }
+        },
+        "wildfly10": {
+            "version": "10.1.0.Final"
+        },
+        "wildfly9": {
+            "version": "9.0.2.Final"
+        }
+    }
+}

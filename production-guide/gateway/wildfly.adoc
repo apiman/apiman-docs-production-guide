@@ -1,0 +1,50 @@
+= WildFly/EAP Production Guide
+
+The easiest way to install just the API Gateway is to download and install the apiman quickstart overlay ZIP and then remove the extraneous components.
+Follow that up with some modification of the `apiman.properties` configuration file and you'll be Gatewaying in no time!
+
+Here are the steps you should take to install a standalone API Gateway:
+
+1. Download and unpack WildFly 10
+2. Download apiman
+3. Unpack apiman into WildFly 10
+4. Remove unused apiman deployments from standalone/deployments
+
+Which apiman deployments should you delete?  These:
+
+    standalone/deployments/apiman-ds.xml
+    standalone/deployments/apiman-es.war
+    standalone/deployments/apiman.war
+    standalone/deployments/apimanui.war
+
+== Disabling the Keycloak Server
+
+Because you will be using an external/standalone Keycloak server, it is useful to disable the Keycloak components that are bundled with the apiman quickstart overlay ZIP.
+To do that, *remove* the following subsystem from the *standalone-apiman.xml* file:
+
+```xml
+<subsystem xmlns="urn:jboss:domain:keycloak-server:1.1">
+  <web-context>auth</web-context>
+</subsystem>
+```
+
+== Configuring Keycloak Authentication for the Gateway API
+
+The API Gateway has a REST based configuration API which the API Manager uses when publishing APIs to
+it.
+This API is protected by Keycloak authentication.  The configuration included in the apiman quickstart
+overlay ZIP assumes that the Keycloak server is local, so you'll need to modify the *standalone-apiman.xml*
+file to point to the remote Keycloak
+instance.
+
+Here is the relevant portion of the *standalone-apiman.xml* file that you must change:
+
+```xml
+<realm name="apiman">
+  <realm-public-key>MIIB..snip..QAB</realm-public-key>
+  <auth-server-url>https://keycloak-host.org:8443/auth</auth-server-url>
+  <ssl-required>none</ssl-required>
+  <enable-cors>false</enable-cors>
+  <principal-attribute>preferred_username</principal-attribute>
+</realm>
+```
