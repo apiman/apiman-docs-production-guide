@@ -1,6 +1,6 @@
 = Apiman Production Guide Documentation
 
-=== Apiman Gateway
+== Apiman Gateway
 // Vert.x
 . link:production-guide/gateway/vertx.adoc[Vert.x-specific Setup]
 .. link:production-guide/gateway/vertx.adoc#_configuring_keycloak_authentication_for_the_gateway_api[Keycloak Auth for Gateway API]
@@ -13,7 +13,7 @@
 .. link:production-guide/gateway/gateway.adoc#_setting_the_api_gateway_public_endpoint[Setting the public endpoint]
 .. link:production-guide/gateway/gateway.adoc#_pointing_the_api_gateway_to_a_remote_elasticsearch[Using a remote Elasticsearch]
 
-=== Apiman Manager
+== Apiman Manager
 . link:production-guide/manager/manager.adoc[Manager]
 .. link:production-guide/manager/manager.adoc#_deployment_tooling_for_apiman[Deployment Tooling]
 .. link:production-guide/manager/manager.adoc#_database[Database]
