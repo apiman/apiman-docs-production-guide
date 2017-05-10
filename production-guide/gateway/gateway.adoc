@@ -72,3 +72,7 @@ TIP: You will need to replace the values above with those appropriate for your i
 
 {% endmethod %}
 {{ end }}++++
+
+== Pointing the API Gateway to a Remote Keycloak
+
+Refer to the Installation section on link:https://apiman.gitbooks.io/apiman-installation-guide/installation-guide/gateway/security.html#_setup[configuring a Remote Keycloak instance]. Be sure to select your implementation by clicking on the *Vert.x* or *Servlet* tabs at the top right.

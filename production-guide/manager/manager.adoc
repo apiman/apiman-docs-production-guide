@@ -2,10 +2,10 @@
 :toc:
 
 == Deployment Tooling for apiman
-This guide should serve as a guide to manually deploy apiman into production.  However, we also offer a
-simple shell script that can do much of the work for you.  It will likely always be a work in progress,
-so many production deployers may not feel comfortable using it.  However, it can currently install the
-following components:
+
+This guide should serve as a guide to manually deploy apiman into production.  However, we also offer a simple shell script that can do much of the work for you.
+It will likely always be a work in progress, so many production deployers may not feel comfortable using it.
+However, it can currently install the following components:
 
 * Elasticsearch (1.x)
 * Keycloak (1.7.0)
@@ -16,47 +16,45 @@ You can find the apiman production deployer here:
 
 https://github.com/apiman/apiman-deployer/tree/1.2.9.Final
 
-Simply download that script and run it on each of the machines you wish to install the various apiman
-components!
+Simply download that script and run it on each of the machines you wish to install the various apiman components!
 
 TIP: The production guide assumes you are installing into WildFly 10.
 The instructions are slightly different if you are using some other platform (Tomcat, older WildFly versions, EAP 7).
 
 == Database
-You have a number of persistence options in both Keycloak and apiman, but this guide will focus on using an
-RDBMS instead of other options (e.g. Elasticsearch for apiman or MongoDB for KC).
 
-On a separate server, install a production ready database such as MySQL, Oracle, or PostgreSQL.  You will
-want to create two schemas/databases:
+You have a number of persistence options in both Keycloak and apiman, but this guide will focus on using an RDBMS instead of other options (e.g. Elasticsearch for apiman or MongoDB for KC).
+
+On a separate server, install a production ready database such as MySQL, Oracle, or PostgreSQL.
+You will want to create two schemas/databases:
 
 * keycloak
 * apiman
 
 Make sure your DB is accessible remotely and enable whatever security options you need (SSL, users/passwords).
-We recommend using two different users and permissioning them appropriately (e.g. create a "sa_apiman" account
-and a "sa_keycloak" account).
+We recommend using two different users and permissioning them appropriately (e.g. create a "sa_apiman" account and a "sa_keycloak" account).
 
-After creating the ‘apiman' database, you can initialize it using the appropriate DDL for the database you
-selected.  We currently support MySQL 5, Oracle 12, and PostgreSQL 9.  The DDLs for these databases can be found in
-the quickstart overlay ZIP file, or you can grab them directly from github.  For example:
+After creating the ‘apiman' database, you can initialize it using the appropriate DDL for the database you selected.
+We currently support MySQL 5, Oracle 12, and PostgreSQL 9.
+The DDLs for these databases can be found in the quickstart overlay ZIP file, or you can grab them directly from github.
+
+For example:
 
 https://github.com/apiman/apiman/tree/master/distro/data/src/main/resources/ddls
 
-Make sure you grab the right one for whichever version of apiman you are going to be installing (*hint*: use
-the appropriate github tag).
+Make sure you grab the right one for whichever version of apiman you are going to be installing (*hint*: use the appropriate github tag).
 
 == Installation
 
-The easiest way to install just the API Manager is to download and install the apiman quickstart overlay ZIP
-and then remove the extraneous components.  Follow that up with a few configuration modifications, and
-you should have the Manager running in no time!
+The easiest way to install just the API Manager is to download and install the apiman quickstart overlay ZIP and then remove the extraneous components.
+Follow that up with a few configuration modifications, and you should have the Manager running in no time!
 
 Here are the steps you should take to install a standalone API Manager:
 
-1. Download and unpack WildFly 10
-2. Download apiman
-3. Unpack apiman into WildFly 10
-4. Remove unused apiman deployments from standalone/deployments
+. Download and unpack WildFly 10
+. Download apiman
+. Unpack apiman into WildFly 10
+. Remove unused apiman deployments from standalone/deployments
 
 Which apiman deployments should you delete?  These:
 
@@ -69,9 +67,8 @@ Which apiman deployments should you delete?  These:
 
 === Disabling the Keycloak Server
 
-Because you will be using an external/standalone Keycloak server, it is useful to disable the Keycloak
-components that are bundled with the apiman quickstart overlay ZIP.  To do that, make the following
-modification to the *standalone-apiman.xml* file:
+Because you will be using an external/standalone Keycloak server, it is useful to disable the Keycloak components that are bundled with the apiman quickstart overlay ZIP.
+To do that, make the following modification to the *standalone-apiman.xml* file:
 
 ```xml
 <subsystem xmlns="urn:jboss:domain:keycloak-server:1.1">
@@ -84,9 +81,9 @@ modification to the *standalone-apiman.xml* file:
 This guide assumes you are using a production ready RDBMS as the storage layer for the API Manager.
 Note that other options exist, but configuring them is out of scope for this guide.
 
-Hopefully you've already created and initialized the database in the earlier section labeled "_Installing a
-Database_".  So at this point you really only need to connect the API Manager up to the already existing
-database.  The following must be done in order to connect to your database:
+Hopefully you've already created and initialized the database in the earlier section labeled "_Installing a Database_".
+So at this point you really only need to connect the API Manager up to the already existing database.
+The following must be done in order to connect to your database:
 
 * Deploy a JDBC driver compatible with your database
 * Update the *apiman-ds.xml* datasource file (to point it at your database)
@@ -105,16 +102,15 @@ https://repo1.maven.org/maven2/org/postgresql/postgresql/9.3-1102-jdbc41/postgre
 
 The easiest way to deploy the driver is to simply download it and copy it into the *wildfly/standalone/deployments* directory.
 
-Next, you must update or replace the *apiman-ds.xml* file to something that is configured for your
- particular database.  Examples of appropriate datasource files for mysql and postgresql can be found here:
+Next, you must update or replace the *apiman-ds.xml* file to something that is configured for your particular database.
+Examples of appropriate datasource files for mysql and postgresql can be found here:
 
 https://github.com/apiman/apiman/tree/master/distro/data/src/main/resources/sample-configs
 
 These examples are also included in the apiman quickstart overlay ZIP download.
 
 Finally you must update the *apiman.properties* file to configure the hibernate dialect for your database.
-Apiman includes specific dialects that should be used when installing your database via the included
-DDL files:
+Apiman includes specific dialects that should be used when installing your database via the included DDL files:
 
 * *_H2_*: `io.apiman.manager.api.jpa.ApimanH2Dialect`
 * *_MySQL_*: `io.apiman.manager.api.jpa.ApimanMySQL5Dialect`
@@ -142,7 +138,7 @@ If the Gateway responds as expected, then you can be confident that your setting
 
 TIP: You will need to log into the UI.  The default credentials are:  admin/admin123!
 
-TIP: You may have changed the default user credentials when you installed and configured Keycloak.  If so, make sure you use those credentials.
+TIP: You may have changed the default user credentials when you installed and configured Keycloak. If so, make sure you use those credentials.
 
 === Configuring Keycloak Authentication for the Manager API and UI
 
