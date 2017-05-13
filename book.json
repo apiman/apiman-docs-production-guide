@@ -6,7 +6,9 @@
     "plugins": [
         "anchorjs",
         "theme-apiman",
-        "asciidoc-admonition-icons"
+        "asciidoc-admonition-icons",
+        "ga",
+        "edit-link"
     ],
     "pluginsConfig": {
         "theme-default": {
@@ -25,6 +27,10 @@
                     "name": "Servlet"
                 }
             ]
+        },
+        "edit-link": {
+            "base": "https://github.com/apiman/apiman-docs-production-guide/tree/master",
+            "label": "Edit This Page"
         },
         "admonitions": {
             "note": {
@@ -52,6 +58,9 @@
                 "title": "Warning",
                 "content": "\uf071"
             }
+        },
+        "ga": {
+            "token": "UA-56678850-4"
         }
     },
     "variables": {
